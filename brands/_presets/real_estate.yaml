@@ -1,0 +1,48 @@
+# 產業範本：房仲（買屋、賣屋、租屋、估價）
+# ⚠️ 不動產經紀業的廣告與招攬，原則上要註明經紀業名稱（《不動產經紀業管理條例》第 21 條）；
+#    留言別講保證成交、保證增值、具體獲利；也不要在留言裡要對方的地址或個資。
+key: preset-real-estate
+display_name: 房仲範本
+handle: ""
+industry: 房仲
+enabled: true
+
+keywords: [買房, 首購, 看房, 賣房, 房子要賣, 租屋, 換屋, 房價]
+indicators: [買房, 賣房, 看房, 首購, 換屋, 房子, 房價, 租屋, 套房, 透天, 公寓, 大樓, 仲介, 實價登錄, 貸款]
+exclude_words: [徵人, 應徵, 業配, 工商, 抽獎, 法拍]
+competitor_handle_hints: [realty, house, home, 房屋, 不動產, 地產, 房仲]
+
+filters:
+  skip_japanese_korean: true
+  max_post_age_days: 21
+  min_length: 10
+  min_intent: 2
+
+limits:
+  max_drafts_per_day: 5
+  max_drafts_per_run: 2
+
+voice:
+  tone: 專業但不說教，像在地熟悉行情的朋友，先給一個實用觀念
+  self_reference: 我們
+  emoji: ["🏠", "🙂"]
+  cta: 想了解可以私訊，我們先幫你看實價登錄
+  avoid: [保證成交, 保證增值, 穩賺, 最低價, 包貸]
+  examples:
+    - 首購最常低估的是貸款成數和裝修預算，先抓總預算再看房會比較不會心累。需要的話可以私訊聊聊 🏠
+
+triggers:
+  - id: buy
+    match_any: [買房, 首購, 看房, 換屋, 成家]
+    templates:
+      - 首購最常低估的是貸款成數和裝修預算，先抓總預算再看房會輕鬆很多。需要的話可以私訊聊聊 🏠
+      - 看房可以先查實價登錄抓行情，心裡比較有底。想了解這區的話可以私訊，我們幫你整理 🙂
+  - id: sell
+    match_any: [賣房, 房子要賣, 售屋, 估價, 開價]
+    templates:
+      - 開價前可以先看同社區近期實價登錄，比較不會開太高或賣太便宜。需要的話可以私訊聊聊 🏠
+  - id: rent
+    match_any: [租屋, 找房子, 租房, 套房]
+    negative_any: [房東好爛, 糾紛]
+    templates:
+      - 租屋可以先列好預算、通勤時間和必要條件，篩起來快很多。需要的話可以私訊聊聊 🙂

@@ -1,0 +1,54 @@
+# tw-social-radar 設定檔範例
+# 複製成 config/settings.yaml 再改（settings.yaml 不會進 git）。沒有 settings.yaml 時用這份。
+# 金鑰一律放 .env（見 .env.example 與 docs/金鑰申請.md），不要寫在這裡。
+
+data_dir: data            # 資料庫、匯出檔放這裡（不會進 git）
+brands_dir: brands        # 品牌設定：brands/<key>/brand.yaml
+retention_days: 60        # 貼文保留天數，超過自動刪除（降低個資保存風險）
+
+llm:
+  provider: mock          # mock（示範，不連網）| claude_cli | claude_api | ollama
+  draft_mode: template    # template：只用 brand.yaml 的模板（零成本）｜ llm：AI 依品牌口吻寫
+  classify: false         # true：用 LLM 判斷需求強度（每則貼文多一次呼叫）
+  timeout_seconds: 90
+  claude_cli:
+    model: ""             # 空白 = 用 Claude Code 預設模型
+    bin: ""               # 空白 = 自動在 PATH 找 claude
+  claude_api:
+    model: claude-haiku-5-5
+    max_tokens: 400
+  ollama:
+    host: http://127.0.0.1:11434
+    model: qwen2.5:7b
+
+source:
+  type: file              # file：匯入 inbox/ 的檔案 ｜ threads_api：Meta 官方 Threads API
+  file:
+    paths: ["inbox/*.jsonl", "inbox/*.json", "inbox/*.csv"]
+  threads_api:
+    search_type: RECENT   # RECENT 最新 ｜ TOP 熱門
+    limit_per_keyword: 25
+    max_queries_per_run: 8  # 每輪最多查幾個關鍵字（官方每人每 24 小時有查詢上限）
+    fresh_hours: 72
+
+schedule:
+  interval_minutes: 30    # 排程多久跑一輪（要跟工作排程器／crontab 設的一樣）；審核頁用它推算下一輪
+
+review:
+  host: 127.0.0.1         # 只給本機用。要給手機連請改 0.0.0.0，並一定要設 RADAR_REVIEW_PASSWORD
+  port: 8590
+  allowed_hosts: []       # 透過網域（例如 Cloudflare Tunnel）連時，把網域加進來，例如 [review.example.com]
+
+notify:
+  line: false             # true：有新草稿時用 LINE 推播（要 LINE_CHANNEL_ACCESS_TOKEN、LINE_TO_ID）
+  discord: false          # true：用 Discord webhook 通知（要 DISCORD_WEBHOOK_URL）
+  review_url: http://127.0.0.1:8590
+
+# 自動發文：預設關閉。要先另外安裝外掛（python -m radar plugin install threads_publisher），
+# 讀過外掛 README 的風險說明，再自己改成 true。只會送出「人工核准過」的草稿。
+auto_publish:
+  enabled: false
+  plugin: threads_publisher
+  max_per_brand_per_day: 4
+  window_start_hour: 8
+  window_end_hour: 22

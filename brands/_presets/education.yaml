@@ -1,0 +1,46 @@
+# 產業範本：補教（補習班、家教、才藝班、語言、程式課）
+# ⚠️ 補教廣告避免「保證上榜」「包過」等用語；對象若是未成年人，原則上留言要更保守，不主動要聯絡方式。
+key: preset-education
+display_name: 補教範本
+handle: ""
+industry: 補教
+enabled: true
+
+keywords: [補習班推薦, 家教推薦, 英文家教, 數學家教, 才藝班, 程式課, 會考準備, 學測準備]
+indicators: [補習, 家教, 課程, 上課, 學英文, 數學, 會考, 學測, 才藝, 鋼琴, 程式, 讀書, 考試, 小孩]
+exclude_words: [徵人, 應徵, 業配, 工商, 抽獎, 霸凌]
+competitor_handle_hints: [edu, school, academy, tutor, 補習, 教育, 學苑]
+
+filters:
+  skip_japanese_korean: true
+  max_post_age_days: 21
+  min_length: 8
+  min_intent: 2
+
+limits:
+  max_drafts_per_day: 5
+  max_drafts_per_run: 2
+
+voice:
+  tone: 誠懇、像有經驗的老師，先給一個實用小建議，再說可以協助
+  self_reference: 我們
+  emoji: ["📚", "🙂"]
+  cta: 歡迎私訊聊聊孩子的狀況
+  avoid: [保證上榜, 包過, 保證進步, 第一名, 最強]
+  examples:
+    - 數學卡關常常是前面觀念沒接好，先回頭補基礎會比刷題有用。有需要可以私訊聊聊 📚
+
+triggers:
+  - id: exam
+    match_any: [會考, 學測, 統測, 期中考, 段考, 考試]
+    negative_any: [考完了, 放榜了]
+    templates:
+      - 考前最怕亂刷題，先把常錯的題型整理出來效果會好很多。需要的話可以私訊聊聊讀書計畫 📚
+  - id: subject
+    match_any: [英文, 數學, 理化, 國文, 程式, 寫作]
+    templates:
+      - 這科卡關很常見，通常是某個觀念沒接起來。可以私訊聊聊目前狀況，我們幫你看從哪裡補起 🙂
+  - id: ask_recommend
+    match_any: [推薦, 有沒有, 求介紹, 在找, 家教]
+    templates:
+      - 看到你在找～我們有在教這塊，可以先私訊聊聊需求，也可以先試聽看看適不適合 📚

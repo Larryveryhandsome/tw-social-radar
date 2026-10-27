@@ -1,0 +1,45 @@
+# 示範品牌（虛構）
+key: demo-food
+display_name: 示範便當屋
+handle: ""
+industry: 餐飲
+enabled: true
+
+keywords: [美食推薦, 便當推薦, 聚餐餐廳, 包場, 外燴, 團訂便當, 尾牙餐廳, 咖啡廳推薦]
+indicators: [吃, 餐廳, 便當, 聚餐, 包場, 外燴, 團訂, 尾牙, 咖啡, 甜點, 美食, 午餐, 晚餐, 早午餐]
+exclude_words: [徵人, 應徵, 業配, 工商, 抽獎, 食物中毒, 拉肚子]
+competitor_handle_hints: [food, cafe, kitchen, 餐廳, 便當, 食堂]
+
+filters:
+  skip_japanese_korean: true
+  max_post_age_days: 7
+  min_length: 8
+  min_intent: 2
+
+limits:
+  max_drafts_per_day: 6
+  max_drafts_per_run: 3
+
+voice:
+  tone: 親切、有溫度、像老闆本人在聊天，不硬推
+  self_reference: 我們
+  emoji: ["😋", "☺️"]
+  cta: 歡迎私訊問菜單或訂位
+  avoid: [最好吃, 第一名, 保證, 全台最]
+  examples:
+    - 公司團訂我們有在接，可以依人數和預算配菜，歡迎私訊問菜單 😋
+
+triggers:
+  - id: group_order
+    match_any: [團訂, 公司訂便當, 會議便當, 訂餐, 外燴, 尾牙, 春酒]
+    templates:
+      - 團訂我們有在接，可以依人數和預算配菜，歡迎私訊問菜單 😋
+      - 公司聚餐或會議便當都可以聊聊，我們會依時間幫你安排，歡迎私訊 ☺️
+  - id: party
+    match_any: [包場, 慶生, 聚餐, 同學會, 家庭聚會]
+    templates:
+      - 聚餐要找有空間的地方的話，我們可以包場也能客製菜色，歡迎私訊問問 ☺️
+  - id: ask_recommend
+    match_any: [推薦, 有沒有, 求介紹, 在找]
+    templates:
+      - 看到你在找吃的～有經過可以來我們這邊坐坐，菜單可以先私訊問我們 😋

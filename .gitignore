@@ -1,0 +1,15 @@
+# 執行時資料、秘密：一律不進 git
+data/
+inbox/
+plugins/
+config/settings.yaml
+.env
+*.db
+*.db-wal
+*.db-shm
+*.pem
+*.bak*
+__pycache__/
+*.pyc
+.venv/
+venv/

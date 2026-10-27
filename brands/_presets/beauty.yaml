@@ -1,0 +1,46 @@
+# 產業範本：美業（美髮、美甲、美睫、皮膚管理、按摩、寵物美容）
+# ⚠️ 美容業留言避免醫療效能用語（例如「治療」「根治」「消炎」），原則上可能違反相關廣告規範。
+key: preset-beauty
+display_name: 美業範本
+handle: ""
+industry: 美業
+enabled: true
+
+keywords: [剪髮推薦, 染髮推薦, 美甲推薦, 美睫推薦, 燙髮, 頭皮護理, 新娘造型]
+indicators: [頭髮, 剪髮, 染髮, 燙髮, 美甲, 指甲, 美睫, 睫毛, 髮型, 頭皮, 造型, 髮廊, 設計師]
+exclude_words: [徵人, 應徵, 學徒, 業配, 工商, 抽獎, 過敏, 發炎]
+competitor_handle_hints: [hair, salon, nail, lash, beauty, 髮, 美甲, 美睫]
+
+filters:
+  skip_japanese_korean: true
+  max_post_age_days: 14
+  min_length: 8
+  min_intent: 2
+
+limits:
+  max_drafts_per_day: 6
+  max_drafts_per_run: 3
+
+voice:
+  tone: 輕鬆、像會聊天的設計師，給一點專業建議，不推銷
+  self_reference: 我們
+  emoji: ["✨", "💇"]
+  cta: 可以私訊傳照片給我們看看
+  avoid: [治療, 根治, 消炎, 保證, 永久, 最便宜]
+  examples:
+    - 這種髮質其實很適合做低層次，有興趣可以私訊傳照片讓我們看看 ✨
+
+triggers:
+  - id: hair
+    match_any: [剪髮, 染髮, 燙髮, 髮型, 換髮型, 頭髮好亂, 頭髮毛躁]
+    templates:
+      - 想換髮型的話可以先私訊傳照片給我們，我們幫你看適合的方向 ✨
+      - 髮質狀況每個人都不一樣，可以私訊聊聊你想要的感覺，我們幫你評估 💇
+  - id: nails_lash
+    match_any: [美甲, 指甲, 凝膠, 美睫, 嫁接, 睫毛]
+    templates:
+      - 看到你在找～我們有在做，款式可以先私訊參考作品 ✨
+  - id: event
+    match_any: [婚禮, 新娘, 拍婚紗, 畢業典禮, 尾牙造型]
+    templates:
+      - 重要的日子造型可以提早約試做，有需要私訊我們排時間 ✨

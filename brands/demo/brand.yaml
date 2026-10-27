@@ -1,0 +1,64 @@
+# 示範品牌（虛構），搭配 fixtures/demo_posts.jsonl 給 `python -m radar demo` 使用。
+# 自己的品牌請用 `python -m radar brand new` 建立，不要直接改這個。
+key: demo
+display_name: 示範清潔社
+handle: "demo_clean_studio"                     # 你自己的 Threads 帳號（不含 @），用來排除自己的貼文
+industry: 在地服務業
+enabled: true
+
+# 雷達搜尋詞：threads_api 來源會拿這些去查（輪流查，每輪一部分）
+keywords: [清潔推薦, 打掃阿姨, 大掃除, 冷氣清洗, 搬家推薦, 水電師傅, 退租打掃, 裝潢後清潔]
+
+# 上下文詞：貼文至少要提到其中一個，才繼續比對觸發詞（避免短詞亂抓）
+indicators: [清潔, 打掃, 掃除, 冷氣, 搬家, 水電, 修繕, 漏水, 家事, 師傅, 裝潢, 退租]
+
+# 命中就整篇跳過（徵才、業配、抱怨同業等）
+exclude_words: [徵人, 應徵, 職缺, 業配, 工商, 抽獎]
+
+# 帳號名稱含這些字的視為同業，不回
+competitor_handle_hints: [clean, cleaning, 清潔, 家事, housekeep]
+
+filters:
+  skip_japanese_korean: true
+  max_post_age_days: 14
+  min_length: 8
+  min_intent: 2                # 需求強度 1–5，低於這個不產草稿
+
+limits:
+  max_drafts_per_day: 6        # 每天最多產幾則草稿（留挑選空間，又不會洗版）
+  max_drafts_per_run: 3
+
+voice:
+  tone: 溫暖、像熱心的鄰居，先同理再提供幫忙，不推銷
+  self_reference: 我們
+  emoji: ["✨", "☺️"]
+  cta: 有需要可以私訊我們聊聊
+  avoid: [最便宜, 保證, 全台最]
+  examples:
+    - 大掃除自己弄真的會累到腰斷⋯⋯我們可以多人一起進場，有需要私訊聊聊 ☺️
+
+triggers:
+  - id: deep_clean
+    match_any: [大掃除, 深度清潔, 年終掃除, 過年前打掃]
+    negative_any: [掃完了, 已經掃好, 上班, 老闆]
+    templates:
+      - 大掃除自己弄一天下來腰都要斷了⋯⋯我們可以多人一起進場，有需要私訊聊聊 ☺️
+      - 年底檔期通常比較滿，想排的話可以早點私訊我們看時段 ✨
+      - 窗溝、櫃子後面那些平常顧不到的地方，交給我們處理就好，有需要可以私訊 ☺️
+  - id: move_out
+    match_any: [退租, 搬家, 交屋, 入住前, 裝潢後]
+    templates:
+      - 搬家前後真的很多事要忙，清潔可以交給我們，有需要私訊聊聊 ✨
+      - 裝潢後的粉塵藏在每個縫隙，自己擦很崩潰⋯⋯我們有在接這種，可以私訊問問看 ☺️
+  - id: aircon
+    match_any: [冷氣清洗, 冷氣好臭, 冷氣有味道, 洗冷氣]
+    templates:
+      - 冷氣有味道通常是內部該洗了，我們有在做拆洗，有需要可以私訊問問 ☺️
+  - id: repair
+    match_any: [漏水, 水管, 跳電, 修繕, 水電師傅]
+    templates:
+      - 這種狀況越早處理越好，我們可以先幫你看看狀況再報價，有需要私訊聊聊 ✨
+  - id: ask_recommend
+    match_any: [推薦, 有沒有, 求介紹, 請問, 在找]
+    templates:
+      - 看到你在找～我們剛好在做這個，有需要可以私訊聊聊你的狀況 ☺️
