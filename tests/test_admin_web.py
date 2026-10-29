@@ -88,7 +88,7 @@ class TestAdminAccess(unittest.TestCase):
             code, page, _ = self.srv.req(path)
             self.assertEqual(code, 200, path)
             self.assertIn('class="custom-ad"', page, path)
-            self.assertIn("https://line.me/R/ti/p/@812ibtir", page, path)
+            self.assertIn("https://line.me/ti/p/xzHT2IywOM", page, path)
 
     def test_reviewer_gets_403(self):
         amy = ("amy", AMY_PW)
@@ -307,4 +307,4 @@ class TestCustomAdConsole(unittest.TestCase):
         buf = io.TextIOWrapper(io.BytesIO(), encoding="cp950")
         print_custom_ad(buf)
         buf.flush()
-        self.assertIn("@812ibtir", buf.buffer.getvalue().decode("cp950"))
+        self.assertIn("0928-880-392", buf.buffer.getvalue().decode("cp950"))
