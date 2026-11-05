@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import re
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 
 _REL_RE = re.compile(r"(\d+)\s*(秒|分鐘?|小時|天|週|星期|月|年|s|m|h|d|w|y)")
 

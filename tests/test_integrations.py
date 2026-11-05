@@ -9,7 +9,7 @@ from pathlib import Path
 from unittest import mock
 from urllib.parse import parse_qs, urlparse
 
-from helpers import ROOT, cleanup, fake_urlopen, temp_settings
+from helpers import cleanup, fake_urlopen, temp_settings
 from radar import llm as llm_mod
 from radar import notify, pipeline, plugins
 from radar.db import DB

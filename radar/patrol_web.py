@@ -151,7 +151,7 @@ def _brand_card(b: dict, settings: dict, db, can_edit: bool) -> str:
                     for k, v in sorted(skipped.items(), key=lambda x: -x[1]))
     samples = "".join(f'<tr><td>@{_e(s.get("author"))}</td><td>{_e(s.get("snippet"))}</td><td>{_e(s.get("reason"))}</td></tr>'
                       for s in (run or {}).get("samples") or [])
-    filt = (f'<div class="sect"><h3>被過濾掉的貼文 <span class="hint meta">最後一輪</span></h3>'
+    filt = ('<div class="sect"><h3>被過濾掉的貼文 <span class="hint meta">最後一輪</span></h3>'
             + (f'<table><tr><th>原因</th><th>則數</th></tr>{srows}</table>' if srows else '<div class="meta">（沒有）</div>')
             + (f'<div class="meta" style="margin-top:6px">最近幾則範例（只留帳號與前 40 字）</div>'
                f'<table><tr><th>帳號</th><th>內文</th><th>原因</th></tr>{samples}</table>' if samples else "")
