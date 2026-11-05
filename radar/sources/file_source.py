@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import csv
 import glob
+import io
 import json
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -41,22 +42,30 @@ def normalize(raw: dict, source: str = "file") -> dict | None:
         posted = (datetime.now() - timedelta(hours=float(raw["hours_ago"]))).isoformat(timespec="seconds")
     return {
         "post_id": pid,
-        "platform": raw.get("platform") or "threads",
+        "platform": _text(raw.get("platform"), 20) or "threads",
         "author": str(raw.get("author") or raw.get("username") or "").strip().lstrip("@")[:100],
         "content": content,
         "url": safe_url(raw.get("url") or raw.get("permalink")),
         "posted_at": posted,
         "source": source,
-        "source_keyword": raw.get("source_keyword") or raw.get("keyword"),
+        "source_keyword": _text(raw.get("source_keyword") or raw.get("keyword"), 100) or None,
         "reply_count": _int(raw.get("reply_count")),
         "like_count": _int(raw.get("like_count")),
     }
 
 
+def _text(v, limit: int) -> str:
+    """匯入檔的選填文字欄位可能是清單或數字；一律轉成短字串，避免寫進資料庫時整批失敗。"""
+    if isinstance(v, (list, tuple)):
+        v = ",".join(str(x) for x in v)
+    return str(v or "").strip()[:limit]
+
+
 def _int(v) -> int:
+    """按讚／回覆數：壞值或超過 SQLite INTEGER 範圍（例如 1e20）一律夾在 0～2^63-1。"""
     try:
-        return int(float(v or 0))
-    except (TypeError, ValueError):
+        return max(0, min(int(float(v or 0)), 2**63 - 1))
+    except (TypeError, ValueError, OverflowError):
         return 0
 
 
@@ -66,7 +75,7 @@ def read_file(path: Path) -> list[dict]:
     text = path.read_text(encoding="utf-8-sig", errors="replace")
     bad = 0
     if path.suffix.lower() == ".csv":
-        rows = list(csv.DictReader(text.splitlines()))
+        rows = list(csv.DictReader(io.StringIO(text, newline="")))  # 保留引號內的換行
     elif path.suffix.lower() == ".jsonl":
         rows = []
         for line in text.splitlines():

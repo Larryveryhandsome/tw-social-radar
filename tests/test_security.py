@@ -417,6 +417,11 @@ class TestReviewerAccounts(unittest.TestCase):
             with e:
                 return e.code, e.read().decode(), dict(e.headers)
 
+    def test_huge_draft_id_is_404_not_crash(self):
+        """超過 SQLite 整數範圍的草稿編號：以前 OverflowError、連線直接斷掉沒有回應。"""
+        code, _, _ = self.req("/api/drafts/99999999999999999999/approve", "amy", "amy-password-1", {})
+        self.assertEqual(code, 404)
+
     def test_scope(self):
         self.assertEqual(self.req("/")[0], 401)
         code, body, _ = self.req("/api/drafts?status=pending", "amy", "amy-password-1")

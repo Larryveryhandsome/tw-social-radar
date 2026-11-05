@@ -283,7 +283,7 @@ def make_handler(settings: dict, password: str | None, host: str = "127.0.0.1"):
                     return
                 brands = load_brands(settings, db, enabled_only=False)
                 return self._json(*patrol_web.set_keyword(db, brands, allowed, user, body))
-            m = re.fullmatch(r"/api/drafts/(\d+)/(approve|reject|sent)", path)
+            m = re.fullmatch(r"/api/drafts/(\d{1,18})/(approve|reject|sent)", path)
             if not m:
                 return self._json(404, {"error": "not found"})
             body = self._body()
