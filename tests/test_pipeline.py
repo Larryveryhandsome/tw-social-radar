@@ -3,7 +3,7 @@ import json
 import random
 import unittest
 
-from helpers import ROOT, cleanup, temp_settings
+from helpers import cleanup, temp_settings
 from radar import drafter, pipeline
 from radar.llm import MockLLM
 

@@ -53,5 +53,5 @@ def llm_score(llm, brand: dict, text: str) -> int | None:
         if not d.get("is_demand"):
             return 1
         return max(1, min(5, int(d.get("intent", 3))))
-    except (ValueError, TypeError):
+    except (ValueError, TypeError, OverflowError, AttributeError):  # 例如 "intent": 1e999 → inf
         return None

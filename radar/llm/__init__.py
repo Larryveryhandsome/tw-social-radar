@@ -90,13 +90,15 @@ class ClaudeCLI:
         return str(d)
 
     def _run(self, full: str, flags: list):
-        cmd = [self.bin, "-p", full, "--output-format", "text", *flags]
+        # prompt（含陌生人的貼文）一律走標準輸入，不放命令列：Windows 的 claude.cmd 會經過 cmd.exe，
+        # 參數裡的 " & | 等字元可能被當成指令執行（BatBadBut）；也避開 cmd.exe 8191 字的長度上限。
+        cmd = [self.bin, "-p", "--output-format", "text", *flags]
         if self.model:
             cmd += ["--model", self.model]
         try:
-            return subprocess.run(cmd, capture_output=True, timeout=self.timeout, cwd=self.sandbox_dir(),
-                                  creationflags=no_window_flags(),  # Windows 不跳黑色視窗
-                                  stdin=subprocess.DEVNULL)
+            return subprocess.run(cmd, input=full.encode("utf-8"), capture_output=True, timeout=self.timeout,
+                                  cwd=self.sandbox_dir(),
+                                  creationflags=no_window_flags())  # Windows 不跳黑色視窗
         except subprocess.TimeoutExpired:
             raise LLMError("claude CLI 逾時") from None
 
